@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace my_books.Data.Models
 {
@@ -14,5 +15,9 @@ namespace my_books.Data.Models
         public string CoverUrl { get; set; }
         public DateTime DateAdded { get; set; }
         public int? Rate { get; set; }
+
+        [ForeignKey(nameof(Publisher))]
+        public int PublisherId { get; set; }
+        public Publisher Publisher { get; set; }    
     }
 }

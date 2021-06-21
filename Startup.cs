@@ -59,7 +59,6 @@ namespace my_books
                 endpoints.MapControllers();
             });
 
-            DbInitializer.SeedBooks(app);
         }
     }
 }
