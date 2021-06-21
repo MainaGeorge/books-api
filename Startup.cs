@@ -27,6 +27,8 @@ namespace my_books
 
             services.AddControllers();
             services.AddTransient<BookService>();
+            services.AddTransient<AuthorService>();
+            services.AddTransient<PublisherService>();
             services.AddDbContext<AppDbContext>(opt =>
             {
                 opt.UseSqlServer(ConnectionString);
