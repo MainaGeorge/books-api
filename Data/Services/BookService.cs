@@ -19,18 +19,34 @@ namespace my_books.Data.Services
         {
             var book = new Book()
             {
-                Title = model.Title,
                 Description = model.Description,
-                Author = model.Author,
+                Title = model.Title,
                 IsRead = model.IsRead,
                 DateRead = model.DateRead,
                 DateAdded = DateTime.Now,
                 Genre = model.Genre,
                 Rate = model.Rate,
-                CoverUrl = model.CoverUrl
+                CoverUrl = model.CoverUrl,
+                PublisherId = model.PublisherId
             };
 
             _context.Books.Add(book);
+            _context.SaveChanges();
+
+
+            if (!model.AuthorIds.Any()) return;
+
+            foreach (var authorId in model.AuthorIds)
+            {
+                var authorBookJoinTable = new AuthorBookJoinTable
+                {
+                    BookId = book.Id,
+                    AuthorId = authorId
+                };
+
+                _context.AuthorBookJoinTable.Add(authorBookJoinTable);
+            }
+
             _context.SaveChanges();
         }
 
@@ -48,14 +64,13 @@ namespace my_books.Data.Services
             if (book == null)
                 throw new ArgumentNullException(nameof(book), "this argument can not be null");
 
-            book.Title = bookModel.Title ?? book.Title;
             book.Description = bookModel.Description ?? book.Description;
-            book.Author = bookModel.Author ?? book.Author;
             book.CoverUrl = bookModel.CoverUrl ?? book.CoverUrl;
             book.DateRead = bookModel.DateRead ?? book.DateRead;
             book.Rate = bookModel.Rate ?? book.Rate;
             book.Genre = bookModel.Genre ?? book.Genre;
             book.IsRead = bookModel.IsRead;
+            book.Title = bookModel.Title ?? book.Title;
 
             _context.SaveChanges();
         }

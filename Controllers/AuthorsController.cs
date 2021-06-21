@@ -6,11 +6,11 @@ namespace my_books.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthorController : ControllerBase
+    public class AuthorsController : ControllerBase
     {
         private readonly AuthorService _service;
 
-        public AuthorController(AuthorService service)
+        public AuthorsController(AuthorService service)
         {
             _service = service;
         }
