@@ -32,7 +32,7 @@ namespace my_books.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddPublisher([FromBody] PublisherViewModel model)
+        public IActionResult AddPublisher([FromBody] PublisherManipulationModel model)
         {
             _service.AddPublisher(model);
 
@@ -48,7 +48,7 @@ namespace my_books.Controllers
         }
 
         [HttpPut("{publisherId:int}")]
-        public IActionResult UpdatePublisher(int publisherId, PublisherViewModel model)
+        public IActionResult UpdatePublisher(int publisherId, PublisherManipulationModel model)
         {
             _service.UpdatePublisher(publisherId, model);
 

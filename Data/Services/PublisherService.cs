@@ -18,7 +18,7 @@ namespace my_books.Data.Services
 
         public IEnumerable<Publisher> GetPublishers() => _context.Publishers.ToList();
 
-        public void AddPublisher(PublisherViewModel model)
+        public void AddPublisher(PublisherManipulationModel model)
         {
             var publisher = new Publisher { Name = model.Name};
 
@@ -35,7 +35,7 @@ namespace my_books.Data.Services
             _context.SaveChanges();
         }
 
-        public void UpdatePublisher(int publisherId, PublisherViewModel model)
+        public void UpdatePublisher(int publisherId, PublisherManipulationModel model)
         {
             var publisher = GetPublisherById(publisherId);
 

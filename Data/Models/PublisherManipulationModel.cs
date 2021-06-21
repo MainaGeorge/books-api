@@ -1,6 +1,6 @@
 ﻿namespace my_books.Data.Models
 {
-    public class PublisherViewModel
+    public class PublisherManipulationModel
     {
         public string Name { get; set; }
     }

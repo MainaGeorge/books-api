@@ -18,7 +18,7 @@ namespace my_books.Data.Services
 
         public IEnumerable<Author> GetAuthors() => _context.Authors.ToList();
 
-        public void AddAuthor(AuthorViewModel authorModel)
+        public void AddAuthor(AuthorManipulationModel authorModel)
         {
             var author = new Author {FullName = authorModel.FullName};
 
@@ -36,7 +36,7 @@ namespace my_books.Data.Services
             _context.SaveChanges();
         }
 
-        public void UpdateAuthor(int authorId, AuthorViewModel model)
+        public void UpdateAuthor(int authorId, AuthorManipulationModel model)
         {
             var author = GetAuthorById(authorId);
 

@@ -15,7 +15,7 @@ namespace my_books.Data.Services
         }
 
 
-        public void AddBook(BookViewModel model)
+        public void AddBook(BookManipulationModel model)
         {
             var book = new Book()
             {
@@ -38,7 +38,7 @@ namespace my_books.Data.Services
 
         public Book GetBookById(int bookId) => _context.Books.FirstOrDefault(b => b.Id == bookId);
 
-        public void UpdateBook(int bookId, BookViewModel bookModel)
+        public void UpdateBook(int bookId, BookManipulationModel bookModel)
         {
             if (bookModel == null)
                 throw new ArgumentNullException(nameof(bookModel), "this argument can not be null");

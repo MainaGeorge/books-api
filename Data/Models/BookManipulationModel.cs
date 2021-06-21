@@ -2,7 +2,7 @@
 
 namespace my_books.Data.Models
 {
-    public class BookViewModel
+    public class BookManipulationModel
     {
         public string Title { get; set; }
         public string Author { get; set; }

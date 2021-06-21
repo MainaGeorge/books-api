@@ -34,14 +34,14 @@ namespace my_books.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddBook([FromBody] BookViewModel model)
+        public IActionResult AddBook([FromBody] BookManipulationModel model)
         {
             _bookService.AddBook(model);
             return Ok();
         }
 
         [HttpPut("{bookId:int}")]
-        public IActionResult UpdateBook(int bookId, [FromBody]BookViewModel bookModel)
+        public IActionResult UpdateBook(int bookId, [FromBody]BookManipulationModel bookModel)
         {
             _bookService.UpdateBook(bookId, bookModel);
 

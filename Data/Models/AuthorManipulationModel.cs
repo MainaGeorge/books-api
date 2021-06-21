@@ -1,6 +1,6 @@
 ﻿namespace my_books.Data.Models
 {
-    public class AuthorViewModel
+    public class AuthorManipulationModel
     {
         public string FullName { get; set; }    
     }
