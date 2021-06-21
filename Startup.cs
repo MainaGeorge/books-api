@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using my_books.Data;
+using my_books.Data.Services;
 
 namespace my_books
 {
@@ -25,6 +26,7 @@ namespace my_books
         {
 
             services.AddControllers();
+            services.AddTransient<BookService>();
             services.AddDbContext<AppDbContext>(opt =>
             {
                 opt.UseSqlServer(ConnectionString);
@@ -42,7 +44,8 @@ namespace my_books
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "my_books v1"));
+                app.UseSwaggerUI(c =>
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "my_books v1"));
             }
 
             app.UseHttpsRedirection();
