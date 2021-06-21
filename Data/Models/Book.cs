@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace my_books.Data.Models
@@ -18,6 +19,7 @@ namespace my_books.Data.Models
 
         [ForeignKey(nameof(Publisher))]
         public int PublisherId { get; set; }
-        public Publisher Publisher { get; set; }    
+        public Publisher Publisher { get; set; }
+        public List<AuthorBookJoinTable> Authors { get; set; }
     }
 }
