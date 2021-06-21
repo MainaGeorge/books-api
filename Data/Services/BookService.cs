@@ -15,7 +15,7 @@ namespace my_books.Data.Services
         }
 
 
-        public void AddBook(BookManipulationModel model)
+        public void AddBook(BookForCreationDto model)
         {
             var book = new Book()
             {
@@ -50,11 +50,48 @@ namespace my_books.Data.Services
             _context.SaveChanges();
         }
 
-        public List<Book> GetBooks() => _context.Books.ToList();
+        public List<BookForReturningDto> GetBooks()
+        {
+            
+            return _context.Books
+                .Select(b => new BookForReturningDto
+                {
+                    Title = b.Title,
+                    Genre = b.Genre,
+                    Description = b.Description,
+                    IsRead = b.IsRead,
+                    DateRead = b.DateRead,
+                    CoverUrl = b.CoverUrl,
+                    Rate = b.Rate,
+                    Publisher = b.Publisher.Name,
+                    Authors = b.Authors.Select(a => a.Author.FullName).ToList()
+                }).ToList();
+        }
 
-        public Book GetBookById(int bookId) => _context.Books.FirstOrDefault(b => b.Id == bookId);
+        public BookForReturningDto GetBookToReturnById(int bookId)
+        {
+            var book = _context.Books
+                .Where(b => b.Id.Equals(bookId))
+                .Select(b => new BookForReturningDto
+                {
+                    Title = b.Title,
+                    Genre = b.Genre,
+                    Description = b.Description,
+                    IsRead = b.IsRead,
+                    DateRead = b.DateRead,
+                    CoverUrl = b.CoverUrl,
+                    Rate = b.Rate,
+                    Publisher = b.Publisher.Name,
+                    Authors = b.Authors.Select(a => a.Author.FullName).ToList()
+                })
+                .FirstOrDefault();
 
-        public void UpdateBook(int bookId, BookManipulationModel bookModel)
+            return book;
+        }
+
+        public Book GetBookById(int id) => _context.Books.Find(id);
+
+        public void UpdateBook(int bookId, BookForCreationDto bookModel)
         {
             if (bookModel == null)
                 throw new ArgumentNullException(nameof(bookModel), "this argument can not be null");

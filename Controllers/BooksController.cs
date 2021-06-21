@@ -24,9 +24,9 @@ namespace my_books.Controllers
         }
 
         [HttpGet("{bookId:int}")]
-        public IActionResult GetBookById(int bookId)
+        public IActionResult GetBookToReturnById(int bookId)
         {
-            var book = _bookService.GetBookById(bookId);
+            var book = _bookService.GetBookToReturnById(bookId);
 
             if(book != null) return Ok(book);
 
@@ -34,14 +34,14 @@ namespace my_books.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddBook([FromBody] BookManipulationModel model)
+        public IActionResult AddBook([FromBody] BookForCreationDto model)
         {
             _bookService.AddBook(model);
             return Ok();
         }
 
         [HttpPut("{bookId:int}")]
-        public IActionResult UpdateBook(int bookId, [FromBody]BookManipulationModel bookModel)
+        public IActionResult UpdateBook(int bookId, [FromBody]BookForCreationDto bookModel)
         {
             _bookService.UpdateBook(bookId, bookModel);
 

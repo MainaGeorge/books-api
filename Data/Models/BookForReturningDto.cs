@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace my_books.Data.Models
 {
-    public class BookManipulationModel
+    public class BookForReturningDto
     {
         public string Title { get; set; }
         public string Genre { get; set; }
@@ -13,7 +15,7 @@ namespace my_books.Data.Models
         public string CoverUrl { get; set; }
         public int? Rate { get; set; }
 
-        public int PublisherId { get; set; }
-        public IEnumerable<int> AuthorIds { get; set; }
+        public string Publisher { get; set; }
+        public IEnumerable<string> Authors { get; set; }
     }
 }
