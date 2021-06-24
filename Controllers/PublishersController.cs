@@ -26,7 +26,7 @@ namespace my_books.Controllers
         [HttpGet("{publisherId:int}")]
         public IActionResult GetPublisherById(int publisherId)
         {
-           var publisher = _service.GetPublisherById(publisherId);
+           var publisher = _service.GetPublisherToReturnDto(publisherId);
 
            return Ok(publisher);
         }

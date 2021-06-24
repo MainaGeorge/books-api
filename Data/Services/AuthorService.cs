@@ -13,11 +13,23 @@ namespace my_books.Data.Services
             _context = context;
         }
 
-        public Author GetAuthorById(int authorId) => _context.Authors.FirstOrDefault(
-            a => a.Id == authorId);
+        public AuthorToReturnDto GetAuthorToReturnDtoById(int authorId) => _context.Authors
+            .Where(a => a.Id.Equals(authorId))
+            .Select(a => new AuthorToReturnDto
+            {
+                Name = a.FullName,
+                Id = a.Id,
+                Books = a.Books.Select(b => b.Book.Title).ToList()
+            })
+            .FirstOrDefault();
 
-        public IEnumerable<Author> GetAuthors() => _context.Authors.ToList();
-
+        private Author GetAuthorById(int authorId) => _context.Authors.Find(authorId);
+        public IEnumerable<AuthorToReturnDto> GetAuthors() => _context.Authors
+            .Select(a => new AuthorToReturnDto{
+                Name = a.FullName,
+                Id = a.Id,
+                Books = a.Books.Select(b => b.Book.Title).ToList()
+            }).ToList();
         public void AddAuthor(AuthorManipulationModel authorModel)
         {
             var author = new Author {FullName = authorModel.FullName};

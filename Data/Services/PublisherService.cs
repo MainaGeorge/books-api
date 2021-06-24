@@ -13,10 +13,28 @@ namespace my_books.Data.Services
             _context = context;
         }
 
-        public Publisher GetPublisherById(int publisherId) =>
+        private Publisher GetPublisherById(int publisherId) =>
             _context.Publishers.FirstOrDefault(p => p.Id.Equals(publisherId));
 
-        public IEnumerable<Publisher> GetPublishers() => _context.Publishers.ToList();
+        public PublisherToReturnDto GetPublisherToReturnDto(int publisherId)
+        {
+            return 
+                _context.Publishers.Where(p => p.Id.Equals(publisherId))
+                    .Select(p => new PublisherToReturnDto
+                    {
+                        Name = p.Name,
+                        Id = p.Id,
+                        PublishedBooks = p.Books.Select(b => b.Title).ToList()
+                    })
+                    .FirstOrDefault();
+        }
+        public IEnumerable<PublisherToReturnDto> GetPublishers() => _context.Publishers
+            .Select(p => new PublisherToReturnDto
+            {
+                Name = p.Name,
+                Id = p.Id,
+                PublishedBooks = p.Books.Select(b => b.Title).ToList()
+            }).ToList();
 
         public void AddPublisher(PublisherManipulationModel model)
         {

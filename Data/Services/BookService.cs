@@ -89,7 +89,7 @@ namespace my_books.Data.Services
             return book;
         }
 
-        public Book GetBookById(int id) => _context.Books.Find(id);
+        private Book GetBookById(int id) => _context.Books.Find(id);
 
         public void UpdateBook(int bookId, BookForCreationDto bookModel)
         {
