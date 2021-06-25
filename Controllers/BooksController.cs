@@ -23,7 +23,7 @@ namespace my_books.Controllers
             return Ok(books);
         }
 
-        [HttpGet("{bookId:int}")]
+        [HttpGet("{bookId:int}", Name = "GetBookById")]
         public IActionResult GetBookToReturnById(int bookId)
         {
             var book = _bookService.GetBookToReturnById(bookId);
@@ -36,14 +36,14 @@ namespace my_books.Controllers
         [HttpPost]
         public IActionResult AddBook([FromBody] BookForCreationDto model)
         {
-            _bookService.AddBook(model);
-            return Ok();
+            var createdBook = _bookService.AddBook(model);
+            return CreatedAtRoute("GetBookById", new {bookId = createdBook.Id}, createdBook);
         }
 
         [HttpPut("{bookId:int}")]
         public IActionResult UpdateBook(int bookId, [FromBody]BookForCreationDto bookModel)
         {
-            _bookService.UpdateBook(bookId, bookModel);
+            if(!_bookService.UpdateBook(bookId, bookModel)) return NotFound();
 
             return NoContent();
         }
@@ -51,7 +51,7 @@ namespace my_books.Controllers
         [HttpDelete("{bookId:int}")]
         public IActionResult DeleteBook(int bookId)
         {
-            _bookService.DeleteBook(bookId);
+            if(!_bookService.DeleteBook(bookId)) return NotFound();
 
             return NoContent();
         }

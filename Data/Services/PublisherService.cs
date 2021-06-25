@@ -36,32 +36,42 @@ namespace my_books.Data.Services
                 PublishedBooks = p.Books.Select(b => b.Title).ToList()
             }).ToList();
 
-        public void AddPublisher(PublisherManipulationModel model)
+        public PublisherToReturnDto AddPublisher(PublisherManipulationModel model)
         {
             var publisher = new Publisher { Name = model.Name};
 
             _context.Publishers.Add(publisher);
             _context.SaveChanges();
+
+            return new PublisherToReturnDto
+            {
+                Id = publisher.Id,
+                Name = publisher.Name,
+            };
         }
 
-        public void DeletePublisher(int publisherId)
+        public bool DeletePublisher(int publisherId)
         {
             var publisher = GetPublisherById(publisherId);
 
-            if (publisher == null) return;
+            if (publisher == null) return false;
             _context.Publishers.Remove(publisher);
             _context.SaveChanges();
+
+            return true;
         }
 
-        public void UpdatePublisher(int publisherId, PublisherManipulationModel model)
+        public bool UpdatePublisher(int publisherId, PublisherManipulationModel model)
         {
             var publisher = GetPublisherById(publisherId);
 
-            if(publisher == null) return;
+            if(publisher == null) return false;
 
             publisher.Name = model.Name;
 
             _context.SaveChanges();
+
+            return true;
         }
     }
 }

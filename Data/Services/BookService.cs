@@ -15,7 +15,7 @@ namespace my_books.Data.Services
         }
 
 
-        public void AddBook(BookForCreationDto model)
+        public BookForReturningDto AddBook(BookForCreationDto model)
         {
             var book = new Book()
             {
@@ -27,27 +27,43 @@ namespace my_books.Data.Services
                 Genre = model.Genre,
                 Rate = model.Rate,
                 CoverUrl = model.CoverUrl,
-                PublisherId = model.PublisherId
+                PublisherId = model.PublisherId,
             };
 
             _context.Books.Add(book);
             _context.SaveChanges();
 
 
-            if (!model.AuthorIds.Any()) return;
-
-            foreach (var authorId in model.AuthorIds)
+            if (model.AuthorIds.Any())
             {
-                var authorBookJoinTable = new AuthorBookJoinTable
+                foreach (var authorId in model.AuthorIds)
                 {
-                    BookId = book.Id,
-                    AuthorId = authorId
-                };
+                    var authorBookJoinTable = new AuthorBookJoinTable
+                    {
+                        BookId = book.Id,
+                        AuthorId = authorId
+                    };
 
-                _context.AuthorBookJoinTable.Add(authorBookJoinTable);
+                    _context.AuthorBookJoinTable.Add(authorBookJoinTable);
+                }
+                _context.SaveChanges();
             }
 
-            _context.SaveChanges();
+            var bookToReturn = new BookForReturningDto
+            {
+                Title = book.Title,
+                CoverUrl = book.CoverUrl,
+                Description = book.Description,
+                IsRead = book.IsRead,
+                Authors = book.Authors?.Select(b => b.Author.FullName).ToList(),
+                Genre = book.Genre,
+                Rate = book.Rate,
+                DateRead = book.DateRead,
+                Publisher = book.Publisher.Name,
+                Id = book.Id
+            };
+
+            return bookToReturn;
         }
 
         public List<BookForReturningDto> GetBooks()
@@ -91,7 +107,7 @@ namespace my_books.Data.Services
 
         private Book GetBookById(int id) => _context.Books.Find(id);
 
-        public void UpdateBook(int bookId, BookForCreationDto bookModel)
+        public bool UpdateBook(int bookId, BookForCreationDto bookModel)
         {
             if (bookModel == null)
                 throw new ArgumentNullException(nameof(bookModel), "this argument can not be null");
@@ -99,7 +115,7 @@ namespace my_books.Data.Services
             var book = GetBookById(bookId);
 
             if (book == null)
-                throw new ArgumentNullException(nameof(book), "this argument can not be null");
+                return false;
 
             book.Description = bookModel.Description ?? book.Description;
             book.CoverUrl = bookModel.CoverUrl ?? book.CoverUrl;
@@ -110,16 +126,18 @@ namespace my_books.Data.Services
             book.Title = bookModel.Title ?? book.Title;
 
             _context.SaveChanges();
+            return true;
         }
 
-        public void DeleteBook(int bookId)
+        public bool DeleteBook(int bookId)
         {
             var book = GetBookById(bookId);
 
-            if (book == null) return;
+            if (book == null) return false;
 
             _context.Books.Remove(book);
             _context.SaveChanges();
+            return true;
         }
     }
 }

@@ -23,10 +23,12 @@ namespace my_books.Controllers
             return Ok(authors);
         }
 
-        [HttpGet("{authorId:int}")]
+        [HttpGet("{authorId:int}", Name = "GetAuthorById")]
         public IActionResult GetAuthorById(int authorId)
         {
             var author = _service.GetAuthorToReturnDtoById(authorId);
+
+            if (author == null) return NotFound();
 
             return Ok(author);
         }
@@ -34,15 +36,16 @@ namespace my_books.Controllers
         [HttpPost]
         public IActionResult AddAuthor([FromBody] AuthorManipulationModel model)
         {
-            _service.AddAuthor(model);
+            var createdAuthor = _service.AddAuthor(model);
 
-            return Ok();
+            return CreatedAtRoute("GetAuthorById", 
+                new {authorId = createdAuthor.Id}, createdAuthor);
         }
 
         [HttpDelete("{authorId:int}")]
         public IActionResult DeleteAuthor(int authorId)
         {
-            _service.DeleteAuthor(authorId);
+            if(!_service.DeleteAuthor(authorId)) return NotFound();
 
             return NoContent();
         }
@@ -50,7 +53,7 @@ namespace my_books.Controllers
         [HttpPut("{authorId:int}")]
         public IActionResult UpdateAuthor(int authorId, AuthorManipulationModel model)
         {
-            _service.UpdateAuthor(authorId, model);
+            if(!_service.UpdateAuthor(authorId, model)) return NotFound();
 
             return NoContent();
         }

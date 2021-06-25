@@ -23,10 +23,12 @@ namespace my_books.Controllers
             return Ok(publishers);
         }
 
-        [HttpGet("{publisherId:int}")]
+        [HttpGet("{publisherId:int}", Name = "GetPublisherById")]
         public IActionResult GetPublisherById(int publisherId)
         {
            var publisher = _service.GetPublisherToReturnDto(publisherId);
+
+           if (publisher == null) return NotFound();
 
            return Ok(publisher);
         }
@@ -34,23 +36,23 @@ namespace my_books.Controllers
         [HttpPost]
         public IActionResult AddPublisher([FromBody] PublisherManipulationModel model)
         {
-            _service.AddPublisher(model);
+            var publisher = _service.AddPublisher(model);
 
-            return Ok();
+            return CreatedAtAction("GetPublisherById", new {publisherId = publisher.Id}, publisher);
         }
 
         [HttpDelete("{publisherId:int}")]
         public IActionResult DeletePublisher(int publisherId)
         {
-            _service.DeletePublisher(publisherId);
+            if(_service.DeletePublisher(publisherId)) return NoContent();
 
-            return NoContent();
+            return NotFound($"The publisher with id {publisherId} is not in the database");
         }
 
         [HttpPut("{publisherId:int}")]
         public IActionResult UpdatePublisher(int publisherId, PublisherManipulationModel model)
         {
-            _service.UpdatePublisher(publisherId, model);
+            if(!_service.UpdatePublisher(publisherId, model)) return NotFound();
 
             return NoContent();
         }
