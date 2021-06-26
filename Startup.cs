@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using my_books.Data;
 using my_books.Data.Services;
+using my_books.Extensions;
 
 namespace my_books
 {
@@ -49,6 +50,7 @@ namespace my_books
                 app.UseSwaggerUI(c =>
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "my_books v1"));
             }
+            app.ConfigureErrorHandlingMiddleware();
 
             app.UseHttpsRedirection();
 
